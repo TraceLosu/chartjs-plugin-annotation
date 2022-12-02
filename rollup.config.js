@@ -1,7 +1,9 @@
-const json = require('@rollup/plugin-json');
-const resolve = require('@rollup/plugin-node-resolve').default;
-const terser = require('@rollup/plugin-terser').default;
-const {name, version, homepage, main, module: _module} = require('./package.json');
+import { readFileSync } from 'fs';
+import resolve from '@rollup/plugin-node-resolve';
+import terser from '@rollup/plugin-terser';
+import json from '@rollup/plugin-json';
+
+const {name, version, homepage, main, module: _module} = JSON.parse(readFileSync('./package.json'));
 
 const banner = `/*!
 * ${name} v${version}
@@ -21,7 +23,7 @@ const globals = {
   'chart.js/helpers': 'Chart.helpers'
 };
 
-module.exports = [
+export default [
   {
     input,
     plugins: [
@@ -30,7 +32,7 @@ module.exports = [
     ],
     output: {
       name,
-      file: main,
+      file: "dist/chartjs-plugin-annotation.umd.js",
       banner,
       format: 'umd',
       indent: false,
@@ -51,7 +53,7 @@ module.exports = [
     ],
     output: {
       name,
-      file: main.replace('.js', '.min.js'),
+      file: "dist/chartjs-plugin-annotation.umd.min.js",
       format: 'umd',
       indent: false,
       globals
@@ -66,7 +68,7 @@ module.exports = [
     ],
     output: {
       name,
-      file: _module,
+      file: "dist/chartjs-plugin-annotation.esm.js",
       banner,
       format: 'esm',
       indent: false
